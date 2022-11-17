@@ -5,7 +5,7 @@ This repository contributes source code accompanying the manuscript entitled "XA
 
 ## Summary
 
-This project shows the usage of CodeCarbon framework to compute energy consumed by three python models (classification, regresseion and image recognition) to compare the use of SHAP vs feature reduction. Methods developed for an ongoing scientific work entitled "XAI for Sustainable ML"
+This project shows the usage of CodeCarbon framework to compute energy consumed by three python models (classification, regression and image recognition) to compare the use of SHAP vs feature reduction. Methods developed for an ongoing scientific work entitled "XAI for Sustainable ML"
 
 
 ## Getting started
