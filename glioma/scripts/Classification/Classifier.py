@@ -36,6 +36,8 @@ class Classifier:
             print(confusion_matrix(y_test, predictions))
             print(classification_report(y_test, predictions))
             print("Accuracy = " + str(round(accuracy_score(y_test, predictions) * 100, 2)) + " %")
+            print("MSE: " + str(mean_squared_error(y_test, predictions)))
+
             Plotter.plot_confusion_matrix(y_test, predictions)
             if do_shap:
                 Plotter.plot_prediction_desicion(model, X_test, predictions, 0)
