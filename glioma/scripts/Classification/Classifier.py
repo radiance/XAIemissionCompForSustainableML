@@ -14,6 +14,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.feature_selection import RFE
+from sklearn.metrics import mean_squared_error
 
 class Classifier:
     data = pd.DataFrame()
