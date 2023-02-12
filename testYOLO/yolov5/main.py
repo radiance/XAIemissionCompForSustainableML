@@ -176,7 +176,7 @@ def load_and_prepare_images(img_size):
     plt.figure(figsize=(15, 15))
     plt.imshow(img_org)
     #plt.show()
-    plt.savefig('img_org.png')
+    plt.savefig('results/img_org.png')
 
     fig = plt.figure(figsize=(20, 40))
     plt.subplot(1, 2, 1)
@@ -302,7 +302,7 @@ def main(do_shap=True, do_feature_reduction=True):
     ax2 = fig.add_subplot(1,2,2)
     ax2.set_title("image random half super pixels hidden")
     ax2.imshow(img_s[1,:,:,:].transpose(1,2,0))
-    plt.savefig('super_pixels.png')
+    plt.savefig('results/super_pixels.png')
 
     super_pixel_model = torch.nn.Sequential(
         super_pixler,
@@ -311,26 +311,29 @@ def main(do_shap=True, do_feature_reduction=True):
         scoring
     )
 
-    score = curr_score
-    features_reduced = 0
-    threshold = 0.1
+    with open('results/score.txt', 'a') as f:
+        print("Run: do_feature_reduction=" + str(do_feature_reduction) + " do_shap=" + str(do_shap), file=f)
+        score = curr_score
+        features_reduced = 0
+        threshold = 0.1
 
-    if do_feature_reduction:
-        while curr_score <= score + threshold:
-            features_reduced += 1
+        if do_feature_reduction:
+            while curr_score <= score + threshold:
+                features_reduced += 1
+                score = super_pixel_model(np.array([[0 for _ in range(n_super_pixel - features_reduced)]+[1 for _ in range(features_reduced)]]))
 
-            score = super_pixel_model(np.array([[0 for _ in range(n_super_pixel - features_reduced)]+[1 for _ in range(features_reduced)]]))
-            print(score, "# score for ", features_reduced, "feature reduced image")
+                if do_shap:
+                    shap_values_for_image(img_gray, n_super_pixel, super_pixel_model, model, target)
+                
+                print("Score for " + str(features_reduced) + "x feature reduced image: " + str(score[0]), file=f)
+                
+        else:
+            score = super_pixel_model(np.array([[0 for _ in range(n_super_pixel)]]))
 
             if do_shap:
                 shap_values_for_image(img_gray, n_super_pixel, super_pixel_model, model, target)
-    else:
-        score = super_pixel_model(np.array([[0 for _ in range(n_super_pixel)]]))
-        print(score, "# score for ", features_reduced, "feature reduced image")
 
-        if do_shap:
-            shap_values_for_image(img_gray, n_super_pixel, super_pixel_model, model, target)
-
+            print("Score: " + str(score[0]), file=f)
 
 
 if __name__ == "__main__":
