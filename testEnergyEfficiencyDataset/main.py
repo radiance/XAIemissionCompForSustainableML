@@ -134,12 +134,20 @@ def model_fitting(X_normalized, y_h, y_c, do_feature_reduction=False):
             model.fit(X_train, yc_train)
             actr2 = r2_score(yc_train, model.predict(X_train))
             acte2 = r2_score(yc_test, model.predict(X_test))
+            
+            #print('=============================\n', name)
+            #print('MSE heating train: %.3f, test: %.3f' % (mean_squared_error(yh_train, yh_train_pred), mean_squared_error(yh_test, yh_test_pred)))
+            #print('R^2 heating train: %.3f, test: %.3f' % (r2_score(yh_train, yh_train_pred), r2_score(yh_test, yh_test_pred)))
+            #print('MSE cooling train: %.3f, test: %.3f' % (mean_squared_error(yc_train, yc_train_pred), mean_squared_error(yc_test, yc_test_pred)))
+            #print('R^2 cooling train: %.3f, test: %.3f' % (r2_score(yc_train, yc_train_pred), r2_score(yc_test, yh_test_pred)))
+            #print('r2_score (heating,cooling)')
 
             Acc = Acc.append(pd.Series(
                 {'model': name, 'train_Heating': actr1, 'test_Heating': acte1, 'train_Cooling': actr2,
                  'test_Cooling': acte2}), ignore_index=True)
 
         Acc.sort_values(by='test_Cooling')
+        Acc.to_csv('energy_effiency_regressor_comparison_without_fr.csv')
         return regressors
 
 
@@ -219,6 +227,7 @@ def feature_reduction(regressors, X_train, X_test, yh_train, yh_test, yc_train, 
                 break
 
     Acc.sort_values(by='test_Cooling')
+    Acc.to_csv('energy_effiency_regressor_comparison.csv')
     return regressors
 
 
